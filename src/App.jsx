@@ -361,7 +361,7 @@ font-size: 1.5rem;
         </p>
       </AnimatedSection>
       <AnimatedSection className="mt-8 md:mt-0 md:w-1/3" delay={0.2}>
-        <div className="w-128 h-auto md:w-80  sm:w-64  rounded-2xl overflow-hidden bg-white/10 dark:bg-black/10 backdrop-blur-sm">
+        <div className="w-90 h-auto md:w-70  sm:w-64  rounded-2xl overflow-hidden bg-white/10 dark:bg-black/10 backdrop-blur-sm">
           <img
             src="hero_img.jpeg"
             alt="Aiden Allen"
