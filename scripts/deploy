@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Deployment Script for GitHub Pages
+
+# 1. Delete the "gh-pages" branch from the remote repository
+echo "Deleting the 'gh-pages' branch on remote repository..."
+git push origin --delete gh-pages
+if [ $? -ne 0 ]; then
+  echo "Failed to delete 'gh-pages' branch. Exiting."
+  exit 1
+fi
+
+# 2. Run the build command
+echo "Running 'npm run build' to generate the production build..."
+npm run build
+if [ $? -ne 0 ]; then
+  echo "Build failed. Exiting."
+  exit 1
+fi
+
+# 3. Stage the dist folder
+echo "Adding 'dist' folder to git..."
+git add dist -f
+if [ $? -ne 0 ]; then
+  echo "Failed to add 'dist' folder. Exiting."
+  exit 1
+fi
+
+# 4. Commit the changes with a message
+echo "Committing the changes..."
+git commit -m "Deploying to gh-pages"
+if [ $? -ne 0 ]; then
+  echo "Commit failed. Exiting."
+  exit 1
+fi
+
+# 5. Push the build to the gh-pages branch using git subtree
+echo "Pushing build to 'gh-pages' branch..."
+git subtree push --prefix dist origin gh-pages
+if [ $? -ne 0 ]; then
+  echo "Failed to push to 'gh-pages' branch. Exiting."
+  exit 1
+fi
+
+echo "Deployment completed successfully!"
+

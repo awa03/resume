@@ -1,8 +1,11 @@
-# React + Vite
+# Deployment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1. On remote repository delete the "gh-pages" branch. 
 
-Currently, two official plugins are available:
+2. In you local repository run this command: `npm run build`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+3. `git add dist -f`
+
+4. `git commit -m [your commit message here]` 
+
+5. `git subtree push --prefix dist origin gh-pages`
