@@ -74,17 +74,17 @@ const AnimatedSection = ({ children, className, delay = 0, role = 'region', aria
 // Project Card Component
 const ProjectCard = ({ title, description, tech, link, delay }) => (
   <AnimatedSection delay={delay}>
-    <div className="h-full bg-white rounded-xl shadow-lg p-6 transform transition-all duration-500 hover:shadow-xl hover:-translate-y-1 flex flex-col">
-      <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3">{title}</h3>
+    <div className="h-full bg-white rounded-xl shadow-lg p-6 transform transition-all duration-500 hover:shadow-xl hover:-translate-y-1 flex flex-col  dark:bg-gray-800">
+      <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 dark:text-blue-500">{title}</h3>
       <div className="flex-grow overflow-hidden">
-        <p className="text-gray-600 text-sm md:text-base line-clamp-6">{description}</p>
+        <p className="text-gray-600 text-sm md:text-base line-clamp-6 dark:text-gray-200">{description}</p>
       </div>
       <div className="mt-4">
         <div className="flex flex-wrap gap-2 mb-4">
           {tech.map((item, index) => (
             <span 
               key={index}
-              className="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-xs md:text-sm"
+              className="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-xs md:text-sm dark:bg-purple-950"
             >
               {item}
             </span>
@@ -106,17 +106,17 @@ const ProjectCard = ({ title, description, tech, link, delay }) => (
 // Skill Bar Component
 const SkillBar = ({ title, level, color, skills, percent }) => (
   <div>
-    <div className="flex justify-between mb-2">
-      <span className="font-medium text-gray-700">{title}</span>
+    <div className="flex justify-between mb-2 dark:text-white">
+      <span className="font-medium text-gray-700 dark:text-gray-200">{title}</span>
       <span className={`text-${color}-600`}>{level}</span>
     </div>
-    <div className="h-2 bg-gray-200 rounded-full">
+    <div className="h-2 bg-gray-200 rounded-full dark:text-white">
       <div 
-        className={`h-2 bg-${color}-600 rounded-full`}
+        className={`h-2 bg-blue-600 rounded-full`}
         style={{ width: `${percent}%` }} // Dynamically sets the width based on percent
       />
     </div>
-    <div className="mt-2 flex gap-2 flex-wrap">
+    <div className="mt-2 flex gap-2 flex-wrap dark:text-white">
       {skills.map((skill, index) => (
         <span key={index} className="text-sm text-gray-600">{skill}</span>
       ))}
@@ -127,10 +127,10 @@ const SkillBar = ({ title, level, color, skills, percent }) => (
 // Experience Card Component
 const ExperienceCard = ({ title, company, period, points, delay, color }) => (
   <AnimatedSection delay={delay}>
-    <div className="bg-white p-4 md:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+    <div className="bg-white p-4 md:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 dark:shadow-gray-900 dark:bg-gray-800">
       <h3 className="text-xl md:text-2xl font-bold text-gray-800">{title}</h3>
       <p className={`text-${color}-600 mb-4`}>{company} • {period}</p>
-      <ul className="space-y-3 text-gray-600 text-sm md:text-base">
+      <ul className="space-y-3 text-gray-600 text-sm md:text-base dark:text-gray-200">
         {points.map((point, index) => (
           <li key={index}>• {point}</li>
         ))}
@@ -143,7 +143,7 @@ const ExperienceCard = ({ title, company, period, points, delay, color }) => (
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const parallaxRef = useRef();
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
 
   const scrollTo = (page) => {
     parallaxRef.current?.scrollTo(page);
@@ -410,7 +410,7 @@ font-size: 1.5rem;
   >
     <AnimatedSection className="max-w-lg w-full bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 hover:shadow-2xl transition-shadow duration-300">
       <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800 dark:text-white">Technical Expertise</h2>
-      <div className="space-y-6">
+      <div className="space-y-6 dark:text-white">
         {skills.map((skill, index) => (
           <SkillBar key={index} {...skill} />
         ))}
