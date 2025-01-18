@@ -1,13 +1,19 @@
+
 #!/bin/bash
 
 # Deployment Script for GitHub Pages
 
-# 1. Delete the "gh-pages" branch from the remote repository
-echo "Deleting the 'gh-pages' branch on remote repository..."
-git push origin --delete gh-pages
-if [ $? -ne 0 ]; then
-  echo "Failed to delete 'gh-pages' branch. Exiting."
-  exit 1
+# 1. Check if the "gh-pages" branch exists on the remote repository
+echo "Checking if 'gh-pages' branch exists on remote repository..."
+if git ls-remote --exit-code --heads origin gh-pages; then
+  echo "Deleting the 'gh-pages' branch on remote repository..."
+  git push origin --delete gh-pages
+  if [ $? -ne 0 ]; then
+    echo "Failed to delete 'gh-pages' branch. Exiting."
+    exit 1
+  fi
+else
+  echo "'gh-pages' branch does not exist on the remote repository. Skipping deletion."
 fi
 
 # 2. Run the build command
