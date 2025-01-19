@@ -421,7 +421,7 @@ font-size: 1.5rem;
 
   {/* Skills Section */}
   <ParallaxLayer
-    offset={1.7}
+    offset={2}
     speed={0.2}
     className="flex justify-center items-center p-4 md:p-8 min-h-fit mb-6"
   >
@@ -437,7 +437,7 @@ font-size: 1.5rem;
 
   {/* Projects Section */}
   <ParallaxLayer
-    offset={2.6}
+    offset={3}
     speed={0.1}
     className="flex items-center justify-center min-h-fit p-4 md:p-8"
   >
