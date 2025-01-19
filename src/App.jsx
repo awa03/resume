@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Parallax, ParallaxLayer } from '@react-spring/parallax';
-import ScrollNav from './ScrollNav';  // Adjust the path based on your file structure
 import { ErrorBoundary } from 'react-error-boundary';
 
 // Custom hook for Intersection Observer (keeping your original implementation)
@@ -97,25 +96,6 @@ const ProjectCard = ({ title, description, tech, link, delay }) => (
   </AnimatedSection>
 );
 
-const ArticleCard = ({ title, description, link, delay }) => (
-  <AnimatedSection delay={delay}>
-    <div className="h-full bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col">
-      <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 dark:text-blue-400 mb-2 sm:mb-3 text-center">{title}</h3>
-      <div className="flex-grow">
-        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 line-clamp-4 sm:line-clamp-6 text-center">{description}</p>
-      </div>
-        <a 
-          href={link}
-          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm sm:text-base font-medium transition-colors duration-200 text-center mx-auto mt-5"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          View Article →
-        </a>
-    </div>
-  </AnimatedSection>
-);
-
 // Skill Bar with improved visual feedback
 const SkillBar = ({ title, level, color, skills, percent }) => (
   <div className="mb-6">
@@ -142,7 +122,7 @@ const SkillBar = ({ title, level, color, skills, percent }) => (
 // Experience Card with improved layout
 const ExperienceCard = ({ title, company, period, points, delay, color }) => (
   <AnimatedSection delay={delay}>
-    <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 dark:shadow-black-900 hover:scale-105 transition-transform rounded-lg shadow-lg hover:shadow-xl  duration-300">
+    <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
       <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-300 mb-1">{title}</h3>
       <p className="text-blue-600 dark:text-blue-400 mb-4 text-sm sm:text-base">{company} • {period}</p>
       <ul className="space-y-2 sm:space-y-3 text-gray-600 dark:text-gray-300 text-sm sm:text-base">
@@ -228,27 +208,6 @@ const App = () => {
     }
   ];
 
-  const articles = [
-{
-      title: "Automation in Software Engineering",
-      description: "Is Automation useful within the field of Software Engineering?",
-      link: "https://medium.com/@4376340/automation-in-software-engineering-ab2287192ddb",
-      delay: 0.2,
-    },
-    {
-      title: "Intro To Data Structures: 1",
-      description: "A brief introduction to Data Structures and Algorithms PT.1",
-      link: "https://medium.com/@4376340/intro-to-data-structures-1-ccb00d655ca0",
-      delay: 0.4,
-    },
-    {
-      title: "A Brief Introduction To Freud",
-      description: "A brief introduction to the ideas of Sigmund Freud",
-      link: "https://medium.com/@4376340/a-brief-introduction-to-freud-f0bfe2a4e8fd",
-      delay: 0.6,
-    }
-  ];
-
   const experiences = [
     {
       title: "Research Assistant",
@@ -295,22 +254,22 @@ const App = () => {
     title: "Backend Development",
     level: "Advanced",
     color: "blue",
-    skills: ["Go", "C", "C++", "C#", "Python", "Node.js"],
-    percent: 80 // Example: Backend Development is 90% filled
+    skills: ["Python", "Go", "Node.js", "C++", "C", "C#"],
+    percent: 90 // Example: Backend Development is 90% filled
   },
   {
     title: "Frontend Development",
     level: "Proficient",
     color: "indigo",
     skills: ["HTML/CSS", "React", "TypeScript", "Next.js"],
-    percent: 60 // Example: Frontend Development is 75% filled
+    percent: 75 // Example: Frontend Development is 75% filled
   },
   {
     title: "Cloud & Infrastructure",
     level: "Proficient",
     color: "purple",
     skills: ["AWS", "GCP", "Kubernetes", "Terraform"],
-    percent: 65 
+    percent: 80 
   }
 ];
   skills.map((skill, index) => (
@@ -391,7 +350,7 @@ font-size: 1.5rem;
 
 
       <nav className="fixed right-4 top-1/2 transform -translate-y-1/2 z-50">
-        {[0, 1, 2, 3, 4, 5, 6].map((page) => (
+        {[0, 1, 2, 3, 4, 5].map((page) => (
           <button
             key={page}
             onClick={() => scrollTo(page)}
@@ -402,18 +361,18 @@ font-size: 1.5rem;
         ))}
       </nav>
 
-<Parallax pages={7} ref={parallaxRef} className="bg-slate-50 dark:bg-gray-900">
+<Parallax pages={6} ref={parallaxRef} className="bg-slate-50 dark:bg-gray-900">
   {/* Hero Section */}
   <ParallaxLayer
     offset={0}
-    speed={0.2}
+    speed={0.1}
     className="flex items-center justify-center bg-gradient-to-br from-gray-900 to-blue-800 dark:from-gray-900 dark:to-blue-900 "
   >
     <div className="flex flex-col md:flex-row items-center justify-between max-w-6xl w-full px-4 md:px-8">
       <AnimatedSection className="text-white md:w-1/2">
         <h1 className="text-4xl md:text-6xl font-bold mb-4">Aiden Allen</h1>
-        <p className="text-xl md:text-2xl text-purple-400 dark:text-purple-300 italic">Research Assistant & Fullstack Engineer</p>
-        <p className="mt-4 text-base md:text-lg text-blue-100 dark:text-blue-200">
+        <p className="text-xl md:text-2xl text-purple-100 dark:text-purple-200">Research Assistant & Fullstack Engineer</p>
+        <p className="mt-4 text-base md:text-lg text-purple-200 dark:text-purple-300">
           Specializing in Full Stack Development, Cloud Architecture, and scalable web applications, 
           with strong proficiency in C++, Go, JavaScript, and cloud technologies.
         </p>
@@ -448,10 +407,10 @@ font-size: 1.5rem;
       </p>
       <div className="mt-6 flex flex-wrap gap-3">
         <span className="px-3 py-1 md:px-4 md:py-2 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 rounded-full text-sm font-medium">
-          Backend
+          Cloud Architecture
         </span>
         <span className="px-3 py-1 md:px-4 md:py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded-full text-sm font-medium">
-          Frontend
+          System Design
         </span>
         <span className="px-3 py-1 md:px-4 md:py-2 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-200 rounded-full text-sm font-medium">
           ML Ops
@@ -464,7 +423,7 @@ font-size: 1.5rem;
   <ParallaxLayer
     offset={2}
     speed={0.2}
-    className="flex justify-center items-center p-4 md:p-8 min-h-fit mb-6  "
+    className="flex justify-center items-center p-4 md:p-8 min-h-fit mb-6"
   >
     <AnimatedSection className="max-w-4xl w-full bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 hover:shadow-2xl transition-shadow duration-300">
       <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800 dark:text-white">Technical Expertise</h2>
@@ -480,7 +439,7 @@ font-size: 1.5rem;
   <ParallaxLayer
     offset={3}
     speed={0.1}
-    className="flex items-center justify-center min-h-fit p-4 md:p-8  "
+    className="flex items-center justify-center min-h-fit p-4 md:p-8"
   >
     <div className="max-w-6xl w-full">
       <AnimatedSection className="text-center mb-3">
@@ -496,13 +455,11 @@ font-size: 1.5rem;
     </div>
   </ParallaxLayer>
 
-  
-
   {/* Experience Section */}
   <ParallaxLayer
     offset={4}
     speed={0.3}
-    className="flex items-center justify-center p-4 md:p-8 "
+    className="flex items-center justify-center min-h-fit p-4 md:p-8"
   >
     <div className="max-w-3xl w-full">
       <AnimatedSection className="mb-8">
@@ -516,29 +473,9 @@ font-size: 1.5rem;
     </div>
   </ParallaxLayer>
 
-{/* Articles Section */}
-    <ParallaxLayer
-    offset={5}
-    speed={0.1}
-    className="flex items-center justify-center min-h-fit p-4 md:p-8  "
-  >
-    <div className="max-w-6xl w-full">
-      <AnimatedSection className="text-center mb-3">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-8">Featured Articles</h2>
-      </AnimatedSection>
-      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
-        {articles.map((article, index) => (
-          <div key={index} className="h-full">
-            <ArticleCard {...article} />
-          </div>
-        ))}
-      </div>
-    </div>
-  </ParallaxLayer>
-
   {/* Contact Section */}
   <ParallaxLayer
-    offset={6}
+    offset={5}
     speed={0.2}
     className="flex items-center justify-center min-h-fit bg-gradient-to-br from-blue-600 to-purple-600 dark:from-blue-800 dark:to-purple-800 p-4 md:p-8"
   >
