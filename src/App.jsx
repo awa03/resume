@@ -169,8 +169,7 @@ const App = () => {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-  
+  }, []); 
   const scrollTo = (page) => {
     parallaxRef.current?.scrollTo(page);
   };
@@ -325,10 +324,6 @@ const App = () => {
   />
 ));
 
- const getParallaxSpeed = (baseSpeed) => {
-    return isMobile ? baseSpeed : baseSpeed * 0.5;
-  };
-
   return (
     <div className={`w-full h-screen ${darkMode ? 'dark' : ''}`}>
       <style>
@@ -438,7 +433,7 @@ font-size: 1.5rem;
   {/* About Section */}
   <ParallaxLayer
     offset={1}
-    speed={getParallaxSpeed(0.1)}
+    speed={0.2}
     className="flex items-center p-4 md:p-8 min-h-fit"
   >
     <AnimatedSection className="max-w-4xl mx-auto bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg p-6 md:p-8 rounded-xl">
@@ -468,7 +463,7 @@ font-size: 1.5rem;
   {/* Skills Section */}
   <ParallaxLayer
     offset={2}
-    speed={getParallaxSpeed(0.15)}
+    speed={0.2}
     className="flex justify-center items-center p-4 md:p-8 min-h-fit mb-6  "
   >
     <AnimatedSection className="max-w-4xl w-full bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 hover:shadow-2xl transition-shadow duration-300">
@@ -484,8 +479,7 @@ font-size: 1.5rem;
   {/* Projects Section */}
   <ParallaxLayer
     offset={3}
-    speed={getParallaxSpeed(0.1)} 
-    factor={isMobile ? 0.5 : 1}
+    speed={0.1}
     className="flex items-center justify-center min-h-fit p-4 md:p-8  "
   >
     <div className="max-w-6xl w-full">
@@ -507,8 +501,7 @@ font-size: 1.5rem;
   {/* Experience Section */}
   <ParallaxLayer
     offset={4}
-    speed={getParallaxSpeed(0.05)} 
-    factor={isMobile ? 1.2 : 1}
+    speed={0.3}
     className="flex items-center justify-center p-4 md:p-8 "
   >
     <div className="max-w-3xl w-full">
@@ -526,9 +519,8 @@ font-size: 1.5rem;
 {/* Articles Section */}
     <ParallaxLayer
     offset={5}
-    speed={getParallaxSpeed(0.02)} 
+    speed={0.1}
     className="flex items-center justify-center min-h-fit p-4 md:p-8  "
-    factor={isMobile ? 1.1 : 1}
   >
     <div className="max-w-6xl w-full">
       <AnimatedSection className="text-center mb-3">
@@ -547,7 +539,7 @@ font-size: 1.5rem;
   {/* Contact Section */}
   <ParallaxLayer
     offset={6}
-    speed={0}
+    speed={0.2}
     className="flex items-center justify-center min-h-fit bg-gradient-to-br from-blue-600 to-purple-600 dark:from-blue-800 dark:to-purple-800 p-4 md:p-8"
   >
     <AnimatedSection className="text-center text-white w-full max-w-2xl">
