@@ -163,13 +163,44 @@ const App = () => {
   const parallaxRef = useRef();
   const [darkMode, setDarkMode] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+ useEffect(() => {
+    // More robust mobile detection
+    const checkDeviceSize = () => {
+      const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+      const height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+      setIsMobile(width < 768);
+      setWindowHeight(height);
+    };
+
+    // Initial check
+    checkDeviceSize();
+
+    // Add event listener with debounce
+    let timeoutId = null;
+    const handleResize = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(checkDeviceSize, 150);
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', checkDeviceSize);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', checkDeviceSize);
+    };
+  }, []);  
+
+
+  const getParallaxFactor = (baseHeight) => {
+    if (isMobile) {
+      return Math.max(1, baseHeight * 1.2); // Increase space on mobile
+    }
+    return baseHeight;
+  };
   
   const scrollTo = (page) => {
     parallaxRef.current?.scrollTo(page);
@@ -412,6 +443,7 @@ font-size: 1.5rem;
   <ParallaxLayer
     offset={0}
     speed={0.2}
+    factor={getParallaxFactor(1)}
     className="flex items-center justify-center bg-gradient-to-br from-gray-900 to-blue-800 dark:from-gray-900 dark:to-blue-900 "
   >
     <div className="flex flex-col md:flex-row items-center justify-between max-w-6xl w-full px-4 md:px-8">
@@ -439,6 +471,7 @@ font-size: 1.5rem;
   <ParallaxLayer
     offset={1}
     speed={getParallaxSpeed(0.1)}
+    factor={getParallaxFactor(1)}
     className="flex items-center p-4 md:p-8 min-h-fit"
   >
     <AnimatedSection className="max-w-4xl mx-auto bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg p-6 md:p-8 rounded-xl">
@@ -468,7 +501,8 @@ font-size: 1.5rem;
   {/* Skills Section */}
   <ParallaxLayer
     offset={2}
-    speed={getParallaxSpeed(0.15)}
+    speed={getParallaxSpeed(0.1)}
+    factor={getParallaxFactor(1.1)}
     className="flex justify-center items-center p-4 md:p-8 min-h-fit mb-6  "
   >
     <AnimatedSection className="max-w-4xl w-full bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 hover:shadow-2xl transition-shadow duration-300">
@@ -484,8 +518,8 @@ font-size: 1.5rem;
   {/* Projects Section */}
   <ParallaxLayer
     offset={3}
-    speed={getParallaxSpeed(0.1)} 
-    factor={isMobile ? 0.5 : 1}
+    speed={getParallaxSpeed(0.05)}
+    factor={getParallaxFactor(0.8)}
     className="flex items-center justify-center min-h-fit p-4 md:p-8  "
   >
     <div className="max-w-6xl w-full">
@@ -506,9 +540,9 @@ font-size: 1.5rem;
 
   {/* Experience Section */}
   <ParallaxLayer
-    offset={4}
-    speed={getParallaxSpeed(0.05)} 
-    factor={isMobile ? 1.2 : 1}
+    offset={4.2}
+    speed={getParallaxSpeed(0.02)}
+    factor={getParallaxFactor(0.8)}
     className="flex items-center justify-center p-4 md:p-8 "
   >
     <div className="max-w-3xl w-full">
@@ -525,10 +559,10 @@ font-size: 1.5rem;
 
 {/* Articles Section */}
     <ParallaxLayer
-    offset={5}
-    speed={getParallaxSpeed(0.02)} 
+    offset={4.9}
+    speed={0} 
+    factor={getParallaxFactor(1.3)}
     className="flex items-center justify-center min-h-fit p-4 md:p-8  "
-    factor={isMobile ? 1.1 : 1}
   >
     <div className="max-w-6xl w-full">
       <AnimatedSection className="text-center mb-3">
@@ -548,6 +582,7 @@ font-size: 1.5rem;
   <ParallaxLayer
     offset={6}
     speed={0}
+    factor={getParallaxFactor(1)}
     className="flex items-center justify-center min-h-fit bg-gradient-to-br from-blue-600 to-purple-600 dark:from-blue-800 dark:to-purple-800 p-4 md:p-8"
   >
     <AnimatedSection className="text-center text-white w-full max-w-2xl">
