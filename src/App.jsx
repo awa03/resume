@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './index.css';
 import { Parallax, ParallaxLayer } from '@react-spring/parallax';
 import { ErrorBoundary } from 'react-error-boundary';
 
-// Custom hook for Intersection Observer
+// Custom hook for Intersection Observer (keeping your original implementation)
 const useIntersectionObserver = (callback, options = { threshold: 0.1 }) => {
   const observer = useRef(null);
   const elementsRef = useRef(new Set());
-
+  
   useEffect(() => {
     observer.current = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -17,11 +16,11 @@ const useIntersectionObserver = (callback, options = { threshold: 0.1 }) => {
         }
       });
     }, options);
-
+    
     elementsRef.current.forEach(element => {
       if (element) observer.current.observe(element);
     });
-
+    
     return () => {
       if (observer.current) {
         elementsRef.current.forEach(element => {
@@ -30,7 +29,7 @@ const useIntersectionObserver = (callback, options = { threshold: 0.1 }) => {
       }
     };
   }, [callback, options]);
-
+  
   return (element) => {
     if (element && !elementsRef.current.has(element)) {
       elementsRef.current.add(element);
@@ -39,29 +38,27 @@ const useIntersectionObserver = (callback, options = { threshold: 0.1 }) => {
   };
 };
 
-// Animated Section Component
-const AnimatedSection = ({ children, className, delay = 0, role = 'region', ariaLabel }) => {
+// Animated Section Component with improved transitions
+const AnimatedSection = ({ children, className = '', delay = 0, role = 'region', ariaLabel }) => {
   const elementRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
-
+  
   const addToObserver = useIntersectionObserver((target) => {
     target.classList.add('animate-in');
     setIsVisible(true);
   });
-
+  
   useEffect(() => {
     if (elementRef.current) {
       addToObserver(elementRef.current);
     }
   }, [addToObserver]);
-
+  
   return (
     <div 
       ref={elementRef}
-      className={`opacity-0 translate-y-10 ${className}`}
-      style={{
-        transition: `all 0.8s cubic-bezier(0.4, 0, 0.2, 1) ${delay}s`,
-      }}
+      className={`opacity-0 translate-y-8 transition-all duration-800 ease-out ${className}`}
+      style={{ transitionDelay: `${delay}s` }}
       role={role}
       aria-label={ariaLabel}
       aria-hidden={!isVisible}
@@ -70,29 +67,25 @@ const AnimatedSection = ({ children, className, delay = 0, role = 'region', aria
     </div>
   );
 };
-
-// Project Card Component
+// Project Card with improved responsiveness
 const ProjectCard = ({ title, description, tech, link, delay }) => (
   <AnimatedSection delay={delay}>
-    <div className="h-full bg-white rounded-xl shadow-lg p-6 transform transition-all duration-500 hover:shadow-xl hover:-translate-y-1 flex flex-col  dark:bg-gray-800">
-      <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 dark:text-blue-500">{title}</h3>
-      <div className="flex-grow overflow-hidden">
-        <p className="text-gray-600 text-sm md:text-base line-clamp-6 dark:text-gray-200">{description}</p>
+    <div className="h-full bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col">
+      <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 dark:text-blue-400 mb-2 sm:mb-3">{title}</h3>
+      <div className="flex-grow">
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 line-clamp-4 sm:line-clamp-6">{description}</p>
       </div>
       <div className="mt-4">
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
           {tech.map((item, index) => (
-            <span 
-              key={index}
-              className="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-xs md:text-sm dark:bg-purple-950"
-            >
+            <span key={index} className="px-2 sm:px-3 py-1 bg-purple-50 dark:bg-purple-900 text-purple-600 dark:text-purple-200 rounded-full text-xs sm:text-sm">
               {item}
             </span>
           ))}
         </div>
         <a 
           href={link}
-          className="text-blue-600 hover:text-blue-800 text-sm md:text-base font-medium"
+          className="inline-block text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm sm:text-base font-medium transition-colors duration-200"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -103,48 +96,60 @@ const ProjectCard = ({ title, description, tech, link, delay }) => (
   </AnimatedSection>
 );
 
-// Skill Bar Component
+// Skill Bar with improved visual feedback
 const SkillBar = ({ title, level, color, skills, percent }) => (
-  <div>
-    <div className="flex justify-between mb-2 dark:text-white">
+  <div className="mb-6">
+    <div className="flex justify-between mb-2">
       <span className="font-medium text-gray-700 dark:text-gray-200">{title}</span>
-      <span className={`text-${color}-600`}>{level}</span>
+      <span className="text-blue-600 dark:text-blue-400">{level}</span>
     </div>
-    <div className="h-2 bg-gray-200 rounded-full dark:text-white">
+    <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
       <div 
-        className={`h-2 bg-blue-600 rounded-full`}
-        style={{ width: `${percent}%` }} // Dynamically sets the width based on percent
+        className="h-full bg-blue-600 dark:bg-blue-500 rounded-full transition-all duration-1000"
+        style={{ width: `${percent}%` }}
       />
     </div>
-    <div className="mt-2 flex gap-2 flex-wrap dark:text-white">
+    <div className="mt-2 flex gap-2 flex-wrap">
       {skills.map((skill, index) => (
-        <span key={index} className="text-sm text-gray-600">{skill}</span>
+        <span key={index} className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+          {skill}
+        </span>
       ))}
     </div>
   </div>
 );
 
-// Experience Card Component
+// Experience Card with improved layout
 const ExperienceCard = ({ title, company, period, points, delay, color }) => (
   <AnimatedSection delay={delay}>
-    <div className="bg-white p-4 md:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 dark:shadow-gray-900 dark:bg-gray-800">
-      <h3 className="text-xl md:text-2xl font-bold text-gray-800">{title}</h3>
-      <p className={`text-${color}-600 mb-4`}>{company} • {period}</p>
-      <ul className="space-y-3 text-gray-600 text-sm md:text-base dark:text-gray-200">
+    <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-300 mb-1">{title}</h3>
+      <p className="text-blue-600 dark:text-blue-400 mb-4 text-sm sm:text-base">{company} • {period}</p>
+      <ul className="space-y-2 sm:space-y-3 text-gray-600 dark:text-gray-300 text-sm sm:text-base">
         {points.map((point, index) => (
-          <li key={index}>• {point}</li>
+          <li key={index} className="flex items-start">
+            <span className="mr-2">•</span>
+            <span>{point}</span>
+          </li>
         ))}
       </ul>
     </div>
   </AnimatedSection>
 );
 
-// Main App Component
+// Main App Component with improved navigation and loading
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const parallaxRef = useRef();
   const [darkMode, setDarkMode] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []); 
   const scrollTo = (page) => {
     parallaxRef.current?.scrollTo(page);
   };
@@ -193,6 +198,13 @@ const App = () => {
       tech: ["C++", "Linear Algebra", "Make"],
       link: "https://github.com/awa03/Chess-AI",
       delay: 0.6
+    },
+    {
+      title: "Do Not Resusitate",
+      description: "The purpose of this project was to develop a cohesive project for my CEN4090L course. Within this project I worked with 4 other group mates to develop a game in which the player defeat waves of enemies in a tower defense style. I was responsible for developing the tutorial scenes, the save data, the shop, as well as the player. Additionally, I learned c# in order to complete this project. This project taught me valuble skills in teamwork, and communication.",
+      link: "https://github.com/awa03/Do_Not_Resuscitate",
+      tech: ["C++", "Linear Algebra", "Make"],
+      delay: 0.8,
     }
   ];
 
@@ -213,7 +225,7 @@ const App = () => {
       title: "FullStack Engineer",
       company: "Scientiae",
       period: "2024 - Present",
-      color: "blue",
+      color: "purple",
       points: [
         "Developed a full-stack website from scratch using Docker for containerization, Go for backend development, and HTML, CSS, and JavaScript for the frontend.",
         "Implemented dynamic features such as a mailing list system and a form creation tool akin to Google Forms.",
@@ -275,6 +287,11 @@ const App = () => {
     <div className={`w-full h-screen ${darkMode ? 'dark' : ''}`}>
       <style>
         {`
+.parallax-layer {
+  margin: 0;
+  padding: 0;
+}
+
 .animate-in {
 opacity: 1 !important;
 transform: translateY(0) !important;
@@ -348,8 +365,8 @@ font-size: 1.5rem;
   {/* Hero Section */}
   <ParallaxLayer
     offset={0}
-    speed={0.5}
-    className="flex items-center justify-center bg-gradient-to-br from-gray-900 to-blue-800 dark:from-gray-900 dark:to-blue-900"
+    speed={0.1}
+    className="flex items-center justify-center bg-gradient-to-br from-gray-900 to-blue-800 dark:from-gray-900 dark:to-blue-900 "
   >
     <div className="flex flex-col md:flex-row items-center justify-between max-w-6xl w-full px-4 md:px-8">
       <AnimatedSection className="text-white md:w-1/2">
@@ -375,10 +392,10 @@ font-size: 1.5rem;
   {/* About Section */}
   <ParallaxLayer
     offset={1}
-    speed={0.8}
-    className="flex items-center p-4 md:p-8"
+    speed={0.2}
+    className="flex items-center p-4 md:p-8 min-h-fit"
   >
-    <AnimatedSection className="max-w-2xl mx-auto bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg p-6 md:p-8 rounded-xl">
+    <AnimatedSection className="max-w-4xl mx-auto bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg p-6 md:p-8 rounded-xl">
       <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800 dark:text-white">About Me</h2>
       <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
         With 5 years of programming experience, I specialize in building dynamic, full-stack applications 
@@ -404,11 +421,11 @@ font-size: 1.5rem;
 
   {/* Skills Section */}
   <ParallaxLayer
-    offset={2}
-    speed={1.2}
-    className="flex justify-center items-center p-4 md:p-8"
+    offset={1.7}
+    speed={0.2}
+    className="flex justify-center items-center p-4 md:p-8 min-h-fit mb-6"
   >
-    <AnimatedSection className="max-w-lg w-full bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 hover:shadow-2xl transition-shadow duration-300">
+    <AnimatedSection className="max-w-4xl w-full bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 hover:shadow-2xl transition-shadow duration-300">
       <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800 dark:text-white">Technical Expertise</h2>
       <div className="space-y-6 dark:text-white">
         {skills.map((skill, index) => (
@@ -420,15 +437,15 @@ font-size: 1.5rem;
 
   {/* Projects Section */}
   <ParallaxLayer
-    offset={3}
-    speed={0.8}
+    offset={2.6}
+    speed={0.1}
     className="flex items-center justify-center min-h-fit p-4 md:p-8"
   >
     <div className="max-w-6xl w-full">
       <AnimatedSection className="text-center mb-3">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-5">Featured Projects</h2>
       </AnimatedSection>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {projects.map((project, index) => (
           <div key={index} className="h-full">
             <ProjectCard {...project} />
@@ -441,7 +458,7 @@ font-size: 1.5rem;
   {/* Experience Section */}
   <ParallaxLayer
     offset={4}
-    speed={0.8}
+    speed={0.3}
     className="flex items-center justify-center min-h-fit p-4 md:p-8"
   >
     <div className="max-w-3xl w-full">
@@ -459,15 +476,15 @@ font-size: 1.5rem;
   {/* Contact Section */}
   <ParallaxLayer
     offset={5}
-    speed={1.5}
-    className="flex items-center justify-center min-h-1/2 bg-gradient-to-br from-blue-600 to-purple-600 dark:from-blue-800 dark:to-purple-800 p-4 md:p-8"
+    speed={0.2}
+    className="flex items-center justify-center min-h-fit bg-gradient-to-br from-blue-600 to-purple-600 dark:from-blue-800 dark:to-purple-800 p-4 md:p-8"
   >
     <AnimatedSection className="text-center text-white w-full max-w-2xl">
       <h2 className="text-3xl md:text-4xl font-bold mb-6">Let's Connect</h2>
       <p className="text-lg md:text-xl mb-6">aiden.allen@protonmail.com</p>
       <div className="flex flex-wrap justify-center gap-4">
         <a 
-          href="https://linkedin.com"
+          href="https://linkedin.com/in/aiden-allen-a7385421a"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-white dark:bg-gray-800 px-4 py-2 md:px-6 md:py-3 rounded-lg text-purple-600 dark:text-purple-300 font-medium hover:bg-purple-50 dark:hover:bg-gray-700 transition-colors duration-300 shadow-lg text-sm md:text-base"
@@ -475,7 +492,7 @@ font-size: 1.5rem;
           LinkedIn Profile
         </a>
         <a
-          href="https://github.com"
+          href="https://github.com/awa03"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-white dark:bg-gray-800 px-4 py-2 md:px-6 md:py-3 rounded-lg text-blue-600 dark:text-blue-300 font-medium hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors duration-300 shadow-lg text-sm md:text-base"
