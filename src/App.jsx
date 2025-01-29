@@ -208,7 +208,7 @@ const App = () => {
     {
       title: "Canvas Remake",
       description: "This project represents my endeavor to replicate the renowned grading platform 'Canvas,' showcasing my skills in both backend and frontend development. Utilizing C# for the backend, I integrated a REST API to ensure seamless data management, enhancing the overall functionality of the application. This comprehensive approach marks my first foray into full-stack development, reflecting my capability to handle large-scale projects that can serve millions of users effectively.",
-      tech: ["AWS Lambda", "Kinesis", "DynamoDB", "Node.js"],
+      tech: ["C#", "Maui", "Restful API"],
       link: "https://github.com/awa03/Canvas_App",
       delay: 0.4
     },
