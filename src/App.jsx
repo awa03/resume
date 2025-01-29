@@ -223,7 +223,7 @@ const App = () => {
       title: "Do Not Resusitate",
       description: "The purpose of this project was to develop a cohesive project for my CEN4090L course. Within this project I worked with 4 other group mates to develop a game in which the player defeat waves of enemies in a tower defense style. I was responsible for developing the tutorial scenes, the save data, the shop, as well as the player. Additionally, I learned c# in order to complete this project. This project taught me valuble skills in teamwork, and communication.",
       link: "https://github.com/awa03/Do_Not_Resuscitate",
-      tech: ["C++", "Linear Algebra", "Make"],
+      tech: ["C#", "Unity"],
       delay: 0.8,
     }
   ];
