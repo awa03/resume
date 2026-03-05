@@ -37,14 +37,14 @@ class TreeNode {
 const root = new TreeNode (
   "~",
   [ 
-    new TreeNode ("about", 
+    new TreeNode ("About", 
       [
         new TreeNode("About"),
         new TreeNode("Goals"),
-        new TreeNode("Intrests"),
+        new TreeNode("Interests"),
       ]
     ), 
-    new TreeNode ("expirence", 
+    new TreeNode ("Experience", 
       [
         new TreeNode("IT Support Specialist - FSU"),
         new TreeNode("Research Assistant - FSU"),
@@ -53,13 +53,13 @@ const root = new TreeNode (
         new TreeNode("Software Engineering Intern - AIM HI")
       ]
     ), 
-    new TreeNode ("education", 
+    new TreeNode ("Education", 
       [
         new TreeNode("Computer Science - Florida State University"), 
         new TreeNode("Philosophy mnr   - Florida State University") 
       ]
     ), 
-    new TreeNode ("projects", 
+    new TreeNode ("Projects", 
       [
         new TreeNode("Text Generation"),
         new TreeNode("Basic Utils"),
