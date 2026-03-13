@@ -5,35 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="./tailwind/output.css" rel="stylesheet">
 </head>
-<body class="">
 
-<div class="min-h-screen bg-gray-900 flex items-center justify-center p-6">
-  <div class="w-full max-w-6xl h-[80vh] bg-black text-green-400 rounded-xl shadow-2xl flex flex-col font-mono overflow-hidden">
+<body class="min-h-screen bg-gray-900 flex items-center justify-center p-6 select-none">
 
-    <!-- Terminal Header -->
-    <div class="flex items-center gap-2 bg-gray-800 px-4 py-2">
-      <div class="w-3 h-3 bg-red-500 rounded-full"></div>
-      <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
-      <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-      <span class="ml-4 text-gray-400 text-sm">aiden's resume</span>
-    </div>
+<div id="term_window"
+class="absolute top-20 left-1/2 w-[75vw] -translate-x-1/2 h-[80vh] bg-black text-green-400 rounded-xl shadow-2xl flex flex-col font-mono overflow-auto resize">
 
-    <!-- Terminal Body -->
-    <div id="term_body" class="flex-1 p-4 overflow-auto no-scrollbar space-y-1">
-          <p><span class="text-blue-400">aiden@machine</span>:<span class="text-purple-400">~</span>$ help </p>
-          <p class="text-gray-400">Welcome to my Resume! Please look around!</p>
-          <p class="text-gray-400">This project is being revamped for 2026! Come back later for a completed version</p>
-          <p class="text-gray-400">ls  - list directory contents</p>
-          <p class="text-gray-400">cd  - change directory</p>
-          <p class="text-gray-400">cat - view file contents</p>
-          <p id="term_user_entry"><span class="text-blue-400">user@machine</span>:<span class="text-purple-400" id="term_pwd"></span>$ 
-            <input id="term_btn" class="border-0 focus:outline-none focus:ring-0 focus:border-transparent" />
-          </p>
+  <div id="term_header" class="flex items-center gap-2 bg-gray-800 px-4 py-2 cursor-move">
+    <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+    <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+    <span class="ml-4 text-gray-400 text-sm">aiden's resume</span>
+  </div>
 
-    </div>
+  <div id="term_body" class="flex-1 p-4 overflow-auto no-scrollbar space-y-1">
+    
+    <p>
+      <span class="text-blue-400">aiden@machine</span>:<span class="text-purple-400">~</span>$ help
+    </p>
+
+    <p class="text-gray-400">Welcome to my Resume! Please look around!</p>
+    <p class="text-gray-400">This project is being revamped for 2026! Come back later for a completed version</p>
+    <p class="text-gray-400">ls  - list directory contents</p>
+    <p class="text-gray-400">cd  - change directory</p>
+    <p class="text-gray-400">cat - view file contents</p>
+
+    <p id="term_user_entry">
+      <span class="text-blue-400">user@machine</span>:<span class="text-purple-400" id="term_pwd"></span>$ 
+      <input id="term_btn" class="bg-transparent outline-none flex-1 ml-1" />
+    </p>
 
   </div>
+
 </div>
-<script src="./main.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>

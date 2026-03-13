@@ -1,6 +1,31 @@
 const input = document.getElementById("term_btn");
 const terminal = document.getElementById("term_body");
 
+const termWindow = document.getElementById("term_window");
+const termHeader = document.getElementById("term_header");
+
+let offsetX = 0;
+let offsetY = 0;
+let dragging = false;
+
+termHeader.addEventListener("mousedown", (e) => {
+  dragging = true;
+
+  offsetX = e.clientX - termWindow.offsetLeft;
+  offsetY = e.clientY - termWindow.offsetTop;
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (!dragging) return;
+
+  termWindow.style.left = e.clientX - offsetX + "px";
+  termWindow.style.top = e.clientY - offsetY + "px";
+});
+
+document.addEventListener("mouseup", () => {
+  dragging = false;
+});
+
 function focusEnd() {
   input.focus();
   input.setSelectionRange(input.value.length, input.value.length);
@@ -67,7 +92,9 @@ const root = new TreeNode (
             <h1 class="text-2xl pb-4">About Me</h1>
             <img class="h-80 w-full object-cover" src="./img/me.jpeg" />
             <p class="mt-4">
-              Hey, Im Aiden! I am a passionate Computer Science graduate interested in operating systems development. 
+              Hi, I’m Aiden! <span class="text-gray-400"> I’m a passionate Computer Science graduate with a deep curiosity for how computers work at every level. I was born in Tampa, Florida, and have always been fascinated by technology and the systems that power the digital world. My primary interest lies in operating systems development, where I enjoy exploring low-level programming, system architecture, and the interaction between hardware and software. I’m particularly drawn to understanding how operating systems manage resources, handle processes, and provide the foundation that modern applications rely on.
+              Beyond operating systems, I enjoy learning about different areas of computing and continually expanding my knowledge of software, programming, and system design. I’m always excited to take on new challenges, build meaningful projects, and deepen my understanding of the technology that shapes our everyday lives.
+              </span>
             </p>
           </div>
           `
@@ -78,7 +105,40 @@ const root = new TreeNode (
         ),
         new TreeNode("Interests", "FILE", null,
           `
+          <div class="p-4 bg-gray-900">
+            <h1 class="text-2xl pb-4">Intrests</h1>
+            <h3 class="text-xl pb-4 border-b-4">Technical</h3>
+            <ul class="list-disc p-4 text-grey-400">
+              <li>Operating Systems Development</li>
+              <li>Systems Programming</li>
+              <li>Low-Level Programming (C, C++, Rust)</li>
+              <li>Computer Architecture</li>
+              <li>Kernel Development</li>
+              <li>Memory Management</li>
+              <li>Process Scheduling and Concurrency</li>
+              <li>Distributed Systems</li>
+              <li>Embedded Systems</li>
+              <li>Networking and Network Protocols</li>
+              <li>File Systems</li>
+              <li>Virtualization and Containers</li>
+              <li>Compilers and Programming Languages</li>
+              <li>Performance Optimization</li>
+              <li>Debugging and Reverse Engineering</li>
+              <li>Open Source Development</li>
+            </ul>
+            
+            <h3 class="text-xl pb-4 mt-6 border-b-4">Personal</h3>
+            <ul class="list-disc p-4 text-grey-400">
+              <li>Fragrances</li>
+              <li>Philosophy</li>
+              <li>Powerlifting</li>
+              <li>Body Building</li>
+              <li>Skin care</li>
+              <li>Fashion</li>
+              <li>Music Mixing</li>
+            </ul>
 
+          </div>
           `
         ),
       ]
@@ -389,6 +449,21 @@ function handle_cat(tokens){
   }
 }
 
+function handle_touch(){
+  if(tokens.length == 1){
+  }
+
+  if(tokens.length >= 2){
+    // console.log("Tokens:", tokens.indexOf(1))
+    console.log("Tokens:", tokens[1])
+    const path_toks = tokens[1].split("/");
+    const new_file = path_toks.pop();
+    const file_dir = validate_path(pwd, path_toks)
+
+    file_dir.children.push(new TreeNode(new_file, "FILE", null,"Why cat your empty file??"));
+  }
+}
+
 function add_term_prompt() {
   const p = document.createElement("p");
   p.id = "term_user_entry";
@@ -457,6 +532,9 @@ function eval_term_entry(){
   }
   else if (tokens[0] == "cat"){
     handle_cat(tokens);  
+  }
+  else if(tokens[0] == "touch"){
+    handle_touch(tokens)
   }
 
   // else if(tokens[0] == "pwd"){
