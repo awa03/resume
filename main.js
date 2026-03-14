@@ -4,52 +4,25 @@ const terminal = document.getElementById("term_body");
 const termWindow = document.getElementById("term_window");
 const termHeader = document.getElementById("term_header");
 
-let offsetX = 0;
-let offsetY = 0;
-let dragging = false;
+function make_project_html(title, img, description, link) {
+  const bullets = description
+    .map(item => `<li class="mb-1">${item}</li>`)
+    .join("");
 
-termHeader.addEventListener("mousedown", (e) => {
-  dragging = true;
-
-  offsetX = e.clientX - termWindow.offsetLeft;
-  offsetY = e.clientY - termWindow.offsetTop;
-});
-
-document.addEventListener("mousemove", (e) => {
-  if (!dragging) return;
-
-  termWindow.style.left = e.clientX - offsetX + "px";
-  termWindow.style.top = e.clientY - offsetY + "px";
-});
-
-document.addEventListener("mouseup", () => {
-  dragging = false;
-});
-
-function focusEnd() {
-  input.focus();
-  input.setSelectionRange(input.value.length, input.value.length);
+    return `
+    <a href="${link}" target="_blank">
+      <div class="w-full p-4 bg-gray-800 hover:bg-[#273549]">
+        <h1 class="text-2xl mb-4 text-green-200">${title}</h1>
+        <div class="w-full p-2 mb-4">
+          <img class="w-150 h-150" src="${img}" />
+        </div>
+        <ul class="text-gray-400 list-disc list-inside">
+          ${bullets}
+        </ul>
+      </div>
+    </a>
+    `;
 }
-
-function scrollToBottom() {
-  terminal.scrollTop = terminal.scrollHeight;
-}
-
-function focusAndScroll() {
-  focusEnd();
-  scrollToBottom();
-}
-
-window.addEventListener("load", () => {
-  focusAndScroll();
-});
-
-terminal.addEventListener("click", () => {
-  focusAndScroll();
-});
-
-input.addEventListener("focus", focusAndScroll);
-input.addEventListener("input", scrollToBottom); 
 
 function make_job_html(title, dateRange, description, company) {
   const bullets = description
@@ -129,12 +102,11 @@ const root = new TreeNode (
             
             <h3 class="text-xl pb-4 mt-6 border-b-4">Personal</h3>
             <ul class="list-disc p-4 text-grey-400">
-              <li>Fragrances</li>
               <li>Philosophy</li>
+              <li>Psychology</li>
+              <li>Perfumery</li>
               <li>Powerlifting</li>
               <li>Body Building</li>
-              <li>Skin care</li>
-              <li>Fashion</li>
               <li>Music Mixing</li>
             </ul>
 
@@ -245,13 +217,37 @@ const root = new TreeNode (
     new TreeNode ("Projects", "DIR",
       [
         new TreeNode("Text Generation", "FILE", null, 
-          ""
+          make_project_html(
+            "Text Generation",
+            "./img/text-gen.png",
+            [
+              "Created a byte pair encoding algorithm capable of reducing file size by 50%",
+              "Within bpe file read translation table to decode symbols",
+              "Created a probability chain, markov chain, using symbol occurances",
+              "Using the generated probabilities generated and completed sentences based on training data"
+            ],
+            "https://github.com/awa03/text-completion"
+          )
         ),
         new TreeNode("Basic Utils", "FILE", null,
-          ""
+          make_project_html(
+            "Basic Utils",
+            "./img/basic-utils.jpeg",
+            [
+              "A set of helpful tools for your linux terminal",
+              "trsh - a trashcan for your linux terminal",
+              "file joining - merge files together", 
+              "logger - logging tool",
+            ],
+            "./img/basic-utils.jpeg"
+          )
         ),
         new TreeNode("Meow Lang", "FILE", null,
-          ""
+          "Meow Lang",
+          "",
+          [
+            "Work progress interpreted programming language",
+          ]
         ),
         new TreeNode("Chessfml", "FILE", null,
           ""
@@ -263,8 +259,8 @@ const root = new TreeNode (
 
 
 function add_term_html_entry(contents){
-  parent_div = document.getElementById("term_body")
-  before_div = document.getElementById("term_user_entry")
+  var parent_div = document.getElementById("term_body")
+  var before_div = document.getElementById("term_user_entry")
 
   var resp_div = document.createElement("div");
   resp_div.innerHTML = contents
@@ -285,8 +281,8 @@ function add_term_response(text, before_div, parent_div){
 
 
 function add_term_response_nt(text){
-  parent_div = document.getElementById("term_body")
-  before_div = document.getElementById("term_user_entry")
+  var parent_div = document.getElementById("term_body")
+  var before_div = document.getElementById("term_user_entry")
   add_term_response(text, before_div, parent_div)
 }
 
@@ -500,10 +496,10 @@ function update_pwd(){
 }
 
 function eval_term_entry(){
-  term_entry = term_btn.value;
+  var term_entry = term_btn.value;
   term_btn.value = ""; 
-  term_div = document.getElementById("term_body");
-  term_user_entry = document.getElementById("term_user_entry");
+  var term_div = document.getElementById("term_body");
+  var term_user_entry = document.getElementById("term_user_entry");
 
   /* Split -- "ls this is/the path"
    * Split 1 : [ls, this is/the, path]
@@ -513,7 +509,7 @@ function eval_term_entry(){
    *
    * FIX
    * */
-  tokens = [
+  var tokens = [
       term_entry.split(" ")[0],
       term_entry.split(" ").slice(1).join(" ") 
   ]
@@ -558,7 +554,54 @@ function eval_term_entry(){
   update_pwd();
 }
 
-term_btn.addEventListener("keypress", function(event) {
+let offsetX = 0;
+let offsetY = 0;
+let dragging = false;
+
+termHeader.addEventListener("mousedown", (e) => {
+  dragging = true;
+
+  offsetX = e.clientX - termWindow.offsetLeft;
+  offsetY = e.clientY - termWindow.offsetTop;
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (!dragging) return;
+
+  termWindow.style.left = e.clientX - offsetX + "px";
+  termWindow.style.top = e.clientY - offsetY + "px";
+});
+
+document.addEventListener("mouseup", () => {
+  dragging = false;
+});
+
+function focusEnd() {
+  input.focus();
+  input.setSelectionRange(input.value.length, input.value.length);
+}
+
+function scrollToBottom() {
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+function focusAndScroll() {
+  focusEnd();
+  scrollToBottom();
+}
+
+window.addEventListener("load", () => {
+  focusAndScroll();
+});
+
+terminal.addEventListener("click", () => {
+  focusAndScroll();
+});
+
+input.addEventListener("focus", focusAndScroll);
+input.addEventListener("input", scrollToBottom); 
+
+term_btn.addEventListener("keydown", function(event) {
   focusEnd();
   focusAndScroll();
 
@@ -567,9 +610,9 @@ term_btn.addEventListener("keypress", function(event) {
     eval_term_entry();
   }
 });
-
 function start(){
   update_pwd()
 }
+
 
 start();

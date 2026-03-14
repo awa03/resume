@@ -19,7 +19,6 @@ class="absolute top-20 left-1/2 w-[75vw] -translate-x-1/2 h-[80vh] bg-black text
   </div>
 
   <div id="term_body" class="flex-1 p-4 overflow-auto no-scrollbar space-y-1">
-    
     <p>
       <span class="text-blue-400">aiden@machine</span>:<span class="text-purple-400">~</span>$ help
     </p>
@@ -29,15 +28,27 @@ class="absolute top-20 left-1/2 w-[75vw] -translate-x-1/2 h-[80vh] bg-black text
     <p class="text-gray-400">ls  - list directory contents</p>
     <p class="text-gray-400">cd  - change directory</p>
     <p class="text-gray-400">cat - view file contents</p>
+    <p id="term_user_entry" class="flex items-center font-mono">
+      <span class="text-blue-400">user@machine</span>:<span class="text-purple-400" id="term_pwd"></span>$
 
-    <p id="term_user_entry">
-      <span class="text-blue-400">user@machine</span>:<span class="text-purple-400" id="term_pwd"></span>$ 
-      <input id="term_btn" class="bg-transparent outline-none flex-1 ml-1" />
+      <span class="relative ml-1">
+        <span
+          id="ghost"
+          class="absolute left-0 top-0 text-gray-500 pointer-events-none whitespace-pre"
+        ></span>
+
+        <input
+        id="term_btn"
+        autocomplete="off"
+        class="relative bg-transparent outline-none text-white"
+      />
+      </span>
     </p>
 
   </div>
 
 </div>
-    <script src="main.js"></script>
+    <script type="module" src="main.js"></script>
+    <script src="suggestions.js"></script>
 </body>
 </html>
