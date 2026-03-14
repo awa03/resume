@@ -1,8 +1,9 @@
 const input = document.getElementById("term_btn");
 const terminal = document.getElementById("term_body");
 
-const termWindow = document.getElementById("term_window");
-const termHeader = document.getElementById("term_header");
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}   
 
 function make_project_html(title, img, description, link) {
   const bullets = description
@@ -57,9 +58,9 @@ class TreeNode {
 const root = new TreeNode (
   "~", "DIR",
   [ 
-    new TreeNode ("About", "DIR",
+    new TreeNode ("about", "DIR",
       [
-        new TreeNode("About", "FILE", null, 
+        new TreeNode("about", "FILE", null, 
           `
           <div class="p-4 bg-gray-900">
             <h1 class="text-2xl pb-4">About Me</h1>
@@ -72,11 +73,11 @@ const root = new TreeNode (
           </div>
           `
         ),
-        new TreeNode("Goals", "FILE", null, 
+        new TreeNode("goals", "FILE", null, 
           `
           `
         ),
-        new TreeNode("Interests", "FILE", null,
+        new TreeNode("interests", "FILE", null,
           `
           <div class="p-4 bg-gray-900">
             <h1 class="text-2xl pb-4">Intrests</h1>
@@ -115,7 +116,7 @@ const root = new TreeNode (
         ),
       ]
     ), 
-    new TreeNode ("Experience", "DIR",
+    new TreeNode ("experience", "DIR",
       [
         new TreeNode("IT Support Specialist - FSU", "FILE", null, 
           make_job_html(
@@ -184,7 +185,7 @@ const root = new TreeNode (
         )
       ]
     ), 
-    new TreeNode ("Education", "DIR",  
+    new TreeNode ("education", "DIR",  
       [
         new TreeNode("Computer Science - Florida State University", "FILE", null,
           make_job_html(
@@ -214,7 +215,7 @@ const root = new TreeNode (
         ) 
       ]
     ), 
-    new TreeNode ("Projects", "DIR",
+    new TreeNode ("projects", "DIR",
       [
         new TreeNode("Text Generation", "FILE", null, 
           make_project_html(
@@ -286,6 +287,33 @@ function add_term_response_nt(text){
   add_term_response(text, before_div, parent_div)
 }
 
+function add_term_response_nt_type_writer(text, wait){
+  var resp_div = document.createElement("div");
+  resp_div.classList = "text-gray-400"
+  var parent_div = document.getElementById("term_body")
+  var before_div = document.getElementById("term_user_entry")
+  var i =0;
+  parent_div.insertBefore(resp_div, before_div)
+
+
+  function type_writer() {
+    if(i < text.length){
+      resp_div.innerHTML += text.charAt(i);
+      setTimeout(type_writer, wait);
+      i++;
+    }
+  }
+
+  type_writer();
+}
+
+
+function add_entered_command_nt(txt){
+  var term_div = document.getElementById("term_body");
+  var term_user_entry = document.getElementById("term_user_entry");
+
+  add_entered_command(txt, term_div,  pwd.value, term_user_entry);
+}
 
 function add_entered_command(text, parent, path_div, before_div) {
   const p = document.createElement("p");
@@ -445,7 +473,7 @@ function handle_cat(tokens){
   }
 }
 
-function handle_touch(){
+function handle_touch(tokens){
   if(tokens.length == 1){
   }
 
@@ -458,6 +486,62 @@ function handle_touch(){
 
     file_dir.children.push(new TreeNode(new_file, "FILE", null,"Why cat your empty file??"));
   }
+}
+
+function handle_echo(tokens){
+  add_term_response_nt(tokens[1])
+}
+
+async function type_write_w_sleep(text, gap_char, padding){
+  add_term_response_nt_type_writer(text, gap_char)
+  await sleep((text.length * gap_char) + padding)
+}
+
+async function handle_help(){
+  var gap_char = 65
+  var padding = 500
+
+  await type_write_w_sleep("Thanks for checking out my resume!", gap_char, padding)
+  await type_write_w_sleep("Use commands to navigate the 'file' system to learn more information about me!", gap_char, padding)
+  await type_write_w_sleep("Use 'ls' to view contents of directory", gap_char, padding)
+  await type_write_w_sleep("Heres is your current directories contents", gap_char, padding)
+
+  add_entered_command_nt("ls");
+  handle_ls(["ls"])
+
+  await sleep(1000)
+  await type_write_w_sleep("Now lets try moving to the about directory", gap_char, padding)
+
+  add_entered_command_nt("cd about");
+  handle_cd(["cd", "about"])
+
+  add_entered_command_nt("ls");
+  handle_ls(["ls"])
+
+  await sleep(1000)
+  await type_write_w_sleep("As you can see the contents are different!", gap_char, padding)
+
+  await type_write_w_sleep("To read the contents of one of the listed files", gap_char, 0)
+  await type_write_w_sleep("you can use the cat command...", gap_char, 1000)
+
+  add_entered_command_nt("cat about")
+  handle_cat(["cat", "about"])
+
+  await type_write_w_sleep("Woah thats me! Lets return to the root now", gap_char, padding)
+  await type_write_w_sleep("To return to the root directory we use `cd ~`", gap_char, padding)
+  add_entered_command_nt("cd ~")
+  handle_cd(["cd", "~"])
+
+  await sleep(1000)
+  await type_write_w_sleep("Now if we list the contents again...", gap_char, padding)
+  add_entered_command_nt("ls");
+  add_term_dir(root)
+  await sleep(1000)
+
+  await type_write_w_sleep("We are right back where we started!", gap_char, padding)
+  await type_write_w_sleep("Thats All! Try using -h flag after command if you need more help!", gap_char, padding)
+  await type_write_w_sleep("Thanks again for checking out the resume!", gap_char, padding)
+  
 }
 
 function add_term_prompt() {
@@ -495,7 +579,7 @@ function update_pwd(){
     term_pwd.innerHTML = pwd.value
 }
 
-function eval_term_entry(){
+async function eval_term_entry(){
   var term_entry = term_btn.value;
   term_btn.value = ""; 
   var term_div = document.getElementById("term_body");
@@ -537,14 +621,18 @@ function eval_term_entry(){
   //    
   // }
   //
-  // else if(tokens[0] == "help"){
-  //    
-  // }
+  else if(tokens[0] == "help"){
+    await handle_help(); 
+  }
 
   // fix-- broken input
   else if (tokens[0] == "clear"){
     term_div.innerText=""
     add_term_prompt()
+  }
+
+  else if(tokens[0] == "echo"){
+    handle_echo(tokens)
   }
 
   else{
@@ -553,53 +641,6 @@ function eval_term_entry(){
 
   update_pwd();
 }
-
-let offsetX = 0;
-let offsetY = 0;
-let dragging = false;
-
-termHeader.addEventListener("mousedown", (e) => {
-  dragging = true;
-
-  offsetX = e.clientX - termWindow.offsetLeft;
-  offsetY = e.clientY - termWindow.offsetTop;
-});
-
-document.addEventListener("mousemove", (e) => {
-  if (!dragging) return;
-
-  termWindow.style.left = e.clientX - offsetX + "px";
-  termWindow.style.top = e.clientY - offsetY + "px";
-});
-
-document.addEventListener("mouseup", () => {
-  dragging = false;
-});
-
-function focusEnd() {
-  input.focus();
-  input.setSelectionRange(input.value.length, input.value.length);
-}
-
-function scrollToBottom() {
-  terminal.scrollTop = terminal.scrollHeight;
-}
-
-function focusAndScroll() {
-  focusEnd();
-  scrollToBottom();
-}
-
-window.addEventListener("load", () => {
-  focusAndScroll();
-});
-
-terminal.addEventListener("click", () => {
-  focusAndScroll();
-});
-
-input.addEventListener("focus", focusAndScroll);
-input.addEventListener("input", scrollToBottom); 
 
 term_btn.addEventListener("keydown", function(event) {
   focusEnd();
