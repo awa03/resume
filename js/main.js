@@ -76,7 +76,13 @@ const root = new TreeNode (
         ),
         new TreeNode("goals", "FILE", null, 
           `
-            
+          <div class="p-4 bg-gray-900 rounded-xl">
+            <h1 class="text-2xl pb-4">Goals</h1>
+            <p class="mt-4">
+              <span class="text-gray-400"> My long-term goal is to contribute meaningfully to the Linux kernel through research and development. To that end, I am pursuing master's degrees in Network & Systems Administration and Computer Science at Florida State University, after which I intend to enter a PhD program specializing in operating systems. This trajectory reflects a deep, lifelong passion for research that has shaped who I am.</span> 
+
+            </p>
+          </div>
           `
         ),
         new TreeNode("interests", "FILE", null,
