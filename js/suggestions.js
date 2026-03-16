@@ -122,15 +122,22 @@ function hash_c(char) {
 }
 
 update_suggestion_list("cat");
+update_suggestion_list("cat -a");
+update_suggestion_list("cat -h");
 update_suggestion_list("ls");
+update_suggestion_list("ls -h");
 update_suggestion_list("ls about");
 update_suggestion_list("ls experience");
 update_suggestion_list("ls education");
 update_suggestion_list("ls projects");
 update_suggestion_list("cd");
 update_suggestion_list("cd ~");
+update_suggestion_list("cd -h");
 update_suggestion_list("cd about");
 update_suggestion_list("cd experience");
 update_suggestion_list("cd education");
 update_suggestion_list("cd projects");
 update_suggestion_list("clear");
+update_suggestion_list("clear -h");
+update_suggestion_list("touch")
+update_suggestion_list("touch -h")

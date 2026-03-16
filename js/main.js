@@ -5,6 +5,10 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }   
 
+
+
+        // <div class="w-full p-2 mb-4">
+        //   <img class="w-150 h-150" src="${img}" /> </div>
 function make_project_html(title, img, description, link) {
   const bullets = description
     .map(item => `<li class="mb-1">${item}</li>`)
@@ -12,11 +16,8 @@ function make_project_html(title, img, description, link) {
 
     return `
     <a href="${link}" target="_blank">
-      <div class="w-full p-4 bg-gray-800 hover:bg-[#273549]">
+      <div class="w-full p-4 bg-gray-800 hover:bg-[#273549] rounded-xl">
         <h1 class="text-2xl mb-4 text-green-200">${title}</h1>
-        <div class="w-full p-2 mb-4">
-          <img class="w-150 h-150" src="${img}" />
-        </div>
         <ul class="text-gray-400 list-disc list-inside">
           ${bullets}
         </ul>
@@ -31,7 +32,7 @@ function make_job_html(title, dateRange, description, company) {
     .join("");
 
   return `
-    <div class="w-full p-4 bg-gray-800">
+    <div class="w-full p-4 bg-gray-800 rounded-xl">
       <h1 class="text-2xl mb-4 text-green-200">${company}</h1>
         <div>
           <div class="w-full bg-gray-700 p-2 mb-4">
@@ -62,7 +63,7 @@ const root = new TreeNode (
       [
         new TreeNode("about", "FILE", null, 
           `
-          <div class="p-4 bg-gray-900">
+          <div class="p-4 bg-gray-900 rounded-xl">
             <h1 class="text-2xl pb-4">About Me</h1>
             <img class="h-80 w-full object-cover" src="./img/me.jpeg" />
             <p class="mt-4">
@@ -75,11 +76,12 @@ const root = new TreeNode (
         ),
         new TreeNode("goals", "FILE", null, 
           `
+            
           `
         ),
         new TreeNode("interests", "FILE", null,
           `
-          <div class="p-4 bg-gray-900">
+          <div class="p-4 bg-gray-900 rounded-xl">
             <h1 class="text-2xl pb-4">Intrests</h1>
             <h3 class="text-xl pb-4 border-b-4">Technical</h3>
             <ul class="list-disc p-4 text-grey-400">
@@ -240,23 +242,48 @@ const root = new TreeNode (
               "file joining - merge files together", 
               "logger - logging tool",
             ],
-            "./img/basic-utils.jpeg"
+            "https://github.com/awa03/basic-utils"
           )
         ),
         new TreeNode("Meow Lang", "FILE", null,
-          "Meow Lang",
-          "",
-          [
-            "Work progress interpreted programming language",
-          ]
+          make_project_html(
+            "Meow Lang",
+            "",
+            [
+              "An in development programming language",
+              "Features arithmetic parsing through AST generation",
+              "Implemented variable storage",
+              "Mutable and Unmutable data types", 
+              "Dynamic typing"
+            ],
+            "https://github.com/awa03/meowlang"
+          )
         ),
         new TreeNode("Chessfml", "FILE", null,
-          ""
+          make_project_html(
+            "Chessfml",
+            "",
+            [
+              "Developed a fully functional chess game in C++ using SFML",
+              "Applied Object oriented principles in order to ensure scalability and design",
+              "Developed using the C++ language to ensure portability across multiple platforms"
+            ]
+          )
         ), 
       ]
     ), 
   ]
 );
+
+const help_flags = new Map([
+  ["help", "this command provides an interactive demonstration of some the commands within this terminal emulator!"],
+  ["cd", "use this command to change your working directory. You can also specify a more complex path if you would like!"],
+  ["ls", "use this command to see the contents of your current directory, or if you add a path you can see that paths contents!"],
+  ["cat", "use this command, followed by the path a file, to view its contents! You can also use -a to see all the files in your current directories contents."],
+  ["clear", "use this command to clear the terminal!"],
+  ["touch", "use this command to create new files!"],
+  // ["mkdir", "use this command to make new directories!"]  // TODO
+])
 
 
 function add_term_html_entry(contents){
@@ -473,6 +500,17 @@ function handle_cat(tokens){
   }
 }
 
+function handle_clear(){    
+  if(terminal){
+    Array.from(terminal.children).forEach(child => {
+      if(child.id !== "term_user_entry"){
+        child.remove();
+      }
+    })
+  }
+}
+
+
 function handle_touch(tokens){
   if(tokens.length == 1){
   }
@@ -497,7 +535,8 @@ async function type_write_w_sleep(text, gap_char, padding){
   await sleep((text.length * gap_char) + padding)
 }
 
-async function handle_help(){
+
+async function handle_help(tokens){
   var gap_char = 65
   var padding = 500
 
@@ -544,36 +583,10 @@ async function handle_help(){
   
 }
 
-function add_term_prompt() {
-  const p = document.createElement("p");
-  p.id = "term_user_entry";
-  
-  const userSpan = document.createElement("span");
-  userSpan.className = "text-blue-400";
-  userSpan.textContent = "user@machine";
-  
-  const pathSpan = document.createElement("span");
-  pathSpan.className = "text-purple-400";
-  pathSpan.textContent = ":~";
-  
-  const dollarSign = document.createTextNode("$ ");
-  
-  const input = document.createElement("input");
-  input.id = "term_btn";
-  input.className = "border-0 focus:outline-none focus:ring-0 focus:border-transparent";
-  
-  p.appendChild(userSpan);
-  p.appendChild(pathSpan);
-  p.appendChild(dollarSign);
-  p.appendChild(input);
-  
-  terminal.appendChild(p);
-  
-  input.focus();
-  terminal.scrollTop = terminal.scrollHeight;
-  
-  return input;
+function handle_help_flag(command){
+  add_term_response_nt(help_flags.get(command));
 }
+
 
 function update_pwd(){
     term_pwd.innerHTML = pwd.value
@@ -601,8 +614,15 @@ async function eval_term_entry(){
 
   add_entered_command(term_entry, term_div,  pwd.value, term_user_entry);
 
-  if(tokens.length == 0){
+  if(tokens.length == 2) {
+    if(tokens[1] == "-h"){
+      handle_help_flag(tokens[0]);
+      return;
+    }
+  }
 
+  if(tokens.length == 0){
+    
   }
   else if (tokens[0] == "ls"){
     handle_ls(tokens);  
@@ -622,13 +642,12 @@ async function eval_term_entry(){
   // }
   //
   else if(tokens[0] == "help"){
-    await handle_help(); 
+    await handle_help(tokens); 
   }
 
   // fix-- broken input
   else if (tokens[0] == "clear"){
-    term_div.innerText=""
-    add_term_prompt()
+    handle_clear(tokens);
   }
 
   else if(tokens[0] == "echo"){
@@ -643,9 +662,6 @@ async function eval_term_entry(){
 }
 
 term_btn.addEventListener("keydown", function(event) {
-  focusEnd();
-  focusAndScroll();
-
   if(event.key == "Enter") {
     event.preventDefault();
     eval_term_entry();
